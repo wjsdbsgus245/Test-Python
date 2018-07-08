@@ -4,5 +4,6 @@
         "stdlib.h": "c",
         "stdio.h": "c",
         "tchar.h": "c"
-    }
+    },
+    "python.linting.enabled": false
 }

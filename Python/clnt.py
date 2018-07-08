@@ -4,33 +4,24 @@
 
 import socket
 import time
+import os
 
 import mss
 import cv2
 import numpy
 
-TCP_IP = "localhost"
-TCP_PORT = 30000
+UDP_IP = "localhost"
+UDP_PORT = 30000
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((TCP_IP, TCP_PORT))
+#sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 with mss.mss() as sct:
-    mon = sct.monitors[2]
-    monitor = {"top" : mon["top"] + 0, "left" : mon["left"] + 0, "width" : 1280, "height" : 800, "mon" : 2}
-
+    monitor = {"top" : 0, "left" : 0, "width" : 1280, "height" : 800}
     img = numpy.array(sct.grab(monitor))
 
-    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
-    result, imgencode = cv2.imencode('.jpg', img, encode_param)
-    data = numpy.array(imgencode)
-    stringData = data.tostring()
+data = numpy.array(img, dtype = 'f8')
 
-    s.send(str(len(stringData)).ljust(16))
-    s.send(stringData)
-    s.close()
-    
-    decimg = cv2.imdecode(data, 1)
-    cv2.imshow('Client', decimg)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
+print(type(data))
+print(len(data))
+
+#sock.sendto(data, (UDP_IP, UDP_PORT))

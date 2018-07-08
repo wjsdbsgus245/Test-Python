@@ -9,29 +9,13 @@ import mss
 import cv2
 import numpy
 
-def recvall(sock, count):
-    buf = b''
-    while count:
-        newbuf = sock.recv(count)
-        if not newbuf: return None
-        buf += newbuf
-        count -= len(newbuf)
-    return buf
+UDP_IP = "localhost"
+UDP_PORT = 30000
 
-TCP_IP = "localhost"
-TCP_PORT = 30000
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((UDP_IP, UDP_PORT))
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((TCP_IP, TCP_PORT))
-s.listen(True)
-conn, addr = s.accept()
-
-length = recvall(conn, 16)
-stringData = recvall(conn, int(length))
-data = numpy.fromstring(stringData, dtype = "uint8")
-s.close()
-
-img = cv2.imdecode(data, 1)
-cv2.imshow("Server", img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+data, addr = sock.recvfrom(65535)
+print("Server is received data : {0}".format(data.decode()))
+print("Send Client IP : {0}".format(addr[0]))
+print("Send Client Port : {0}".format(addr[1]))

@@ -7,8 +7,7 @@ import cv2
 import numpy
 
 with mss.mss() as sct:
-    mon = sct.monitors[2]
-    monitor = {"top" : mon["top"] + 0, "left" : mon["left"] + 0, "width" : 1280, "height" : 800, "mon" : 2}
+    monitor = {"top" : 0, "left" : 0, "width" : 1280, "height" : 800}
 
     while "Screen Capturing":
         last_time = time.time()
